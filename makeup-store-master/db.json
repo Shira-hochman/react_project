@@ -18,6 +18,11 @@
       "id": "99c8",
       "email": "sh65326830@gmail.com",
       "password": "Sh6536830!"
+    },
+    {
+      "id": "950d",
+      "email": "gilivega977@gmail.com",
+      "password": "Gilivega977@"
     }
   ],
   "products": [
@@ -26,7 +31,7 @@
       "name": "שפתון אדום קלאסי",
       "price": 45,
       "category": "שפתיים",
-      "image": "https://via.placeholder.com/150?text=Red+Lipstick",
+      "image": "https://adahlazorgan.co.il/cdn/shop/files/100Odem.jpg?v=1747895710&width=533",
       "description": "שפתון עמיד בצבע אדום מרהיב",
       "buyCount": 120
     },
@@ -35,7 +40,7 @@
       "name": "מסקרה לנפח",
       "price": 65,
       "category": "עיניים",
-      "image": "https://via.placeholder.com/150?text=Mascara",
+      "image": "https://adahlazorgan.co.il/cdn/shop/files/NewMascaraBomba1.jpg?v=1749029035&width=533",
       "description": "מסקרה שמעניקה נפח דרמטי לריסים",
       "buyCount": 87
     },
@@ -44,16 +49,16 @@
       "name": "אודם מט גלוסי",
       "price": 50,
       "category": "שפתיים",
-      "image": "https://via.placeholder.com/150?text=Matte+Glossy+Lipstick",
+      "image": "https://adahlazorgan.co.il/cdn/shop/files/100Odem.jpg?v=1747895710&width=533",
       "description": "אודם עם גימור מט ושמנמן במקביל",
       "buyCount": 60
     },
     {
       "id": "4",
-      "name": "איילינר שחור עמיד",
+      "name": "איילינר שחור ג'ל",
       "price": 55,
       "category": "עיניים",
-      "image": "https://via.placeholder.com/150?text=Eyeliner",
+      "image": "https://adahlazorgan.co.il/cdn/shop/files/BLACKGELEYELINER.jpg?v=1749028496&width=533",
       "description": "איילינר נוזלי עמיד לאורך כל היום",
       "buyCount": 95
     },
@@ -62,7 +67,7 @@
       "name": "פודרה שקופה",
       "price": 40,
       "category": "פנים",
-      "image": "https://via.placeholder.com/150?text=Translucent+Powder",
+      "image": "https://adahlazorgan.co.il/cdn/shop/products/Pudra-Avka-Swatch-11-1-1.png?v=1747896165&width=533",
       "description": "פודרה שקופה המעניקה מראה מט טבעי",
       "buyCount": 110
     },
@@ -71,16 +76,16 @@
       "name": "מייקאפ קליר",
       "price": 70,
       "category": "פנים",
-      "image": "https://via.placeholder.com/150?text=Foundation",
+      "image": "https://adahlazorgan.co.il/cdn/shop/files/Fusion4KNEW.jpg?v=1749026992&width=533",
       "description": "מייקאפ קל, נושם עם כיסוי גבוה",
       "buyCount": 130
     },
     {
       "id": "7",
-      "name": "בלש קרם לחות",
+      "name": " קרם לחות",
       "price": 85,
       "category": "פנים",
-      "image": "https://via.placeholder.com/150?text=Blush",
+      "image": "https://adahlazorgan.co.il/cdn/shop/files/New_Cream.jpg?v=1747896304&width=533",
       "description": "בלש קרמי שמעניק לחות וזוהר טבעי",
       "buyCount": 75
     },
@@ -89,7 +94,7 @@
       "name": "צללית טבעית",
       "price": 55,
       "category": "עיניים",
-      "image": "https://via.placeholder.com/150?text=Natural+Eyeshadow",
+      "image": "https://adahlazorgan.co.il/cdn/shop/products/Shadow-Champagne-2-1.jpg?v=1747896050&width=533",
       "description": "צללית בצבעים טבעיים למראה יומיומי",
       "buyCount": 80
     },
@@ -98,7 +103,7 @@
       "name": "מסקרה למראה טבעי",
       "price": 60,
       "category": "עיניים",
-      "image": "https://via.placeholder.com/150?text=Natural+Mascara",
+      "image": "https://adahlazorgan.co.il/cdn/shop/files/VAMPIREMASCARA2.jpg?v=1749029355&width=533",
       "description": "מסקרה שמדגישה מבלי להכביד על הריסים",
       "buyCount": 95
     },
@@ -107,7 +112,7 @@
       "name": "עפרון גבות עמיד",
       "price": 45,
       "category": "עיניים",
-      "image": "https://via.placeholder.com/150?text=Eyebrow+Pencil",
+      "image": "https://adahlazorgan.co.il/cdn/shop/products/D7_AA_D7_9E_D7_95_D7_A0_D7_AA-_D7_9E_D7_95_D7_A6_D7_A8.jpg?v=1747896122&width=533",
       "description": "עפרון גבות לעיצוב מדויק ועמידות לאורך היום",
       "buyCount": 100
     },
@@ -116,7 +121,7 @@
       "name": "קונסילר לכיסוי מושלם",
       "price": 70,
       "category": "פנים",
-      "image": "https://via.placeholder.com/150?text=Concealer",
+      "image": "https://adahlazorgan.co.il/cdn/shop/files/Consealer1.5.jpg?v=1749026585&width=360",
       "description": "קונסילר לכיסוי כתמים ועיגולים כהים",
       "buyCount": 120
     },
@@ -125,7 +130,7 @@
       "name": "סומק פאודרה ורוד",
       "price": 40,
       "category": "פנים",
-      "image": "https://via.placeholder.com/150?text=Powder+Blush",
+      "image": "https://adahlazorgan.co.il/cdn/shop/files/BLUSHNO1.jpg?v=1749025975&width=360",
       "description": "סומק בורוד רך למראה רענן",
       "buyCount": 85
     },
@@ -134,7 +139,7 @@
       "name": "לק אדום ססגוני",
       "price": 50,
       "category": "ציפורניים",
-      "image": "https://via.placeholder.com/150?text=Red+Nail+Polish",
+      "image": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcRiC7YQ_dH746Oq4hEx2JBXplq0eB6rTpIxnRsiAqTpcKUBPXaubuB5vcw5YsMfzkC2ODvPI8CBH4l3kmgP9Wdu4fpvHmpT1Kynjba2ZSoTUtCj54k-2SWVDQ&usqp=CAc",
       "description": "לק עמיד עם צבע אדום מלא חיים",
       "buyCount": 110
     },
