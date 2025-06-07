@@ -1,4 +1,3 @@
-// Register.tsx - דף הרשמה עם ולידציות וסיסמה חזקה
 import React, { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -27,12 +26,12 @@ const Register = () => {
         .matches(/[0-9]/, "חייב להכיל מספר")
         .matches(/[@$!%*?&]/, "חייב להכיל תו מיוחד"),
       confirmPassword: Yup.string()
-        .oneOf([Yup.ref("password"),], "הסיסמאות לא תואמות")
+        .oneOf([Yup.ref("password")], "הסיסמאות לא תואמות")
         .required("אישור סיסמה חובה"),
     }),
     onSubmit: async (values) => {
       try {
-        const res = await axios.post("http://localhost:3001/users", {
+        await axios.post("http://localhost:3001/users", {
           email: values.email,
           password: values.password,
         });

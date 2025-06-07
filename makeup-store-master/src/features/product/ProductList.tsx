@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../store";
+import { addToCart } from "../../pages/cartSlice";
+import "bootstrap/dist/css/bootstrap.min.css";
 
-type Product = {
+interface Product {
   id: number;
   name: string;
   price: number;
@@ -10,29 +14,32 @@ type Product = {
   image: string;
   description: string;
   buyCount: number;
-};
+}
 
 const ProductsList = () => {
+  const user = useSelector((state: RootState) => state.cart.user);
+  const dispatch = useDispatch();
   const [products, setProducts] = useState<Product[]>([]);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   useEffect(() => {
-    // טען מחדש עמוד 1 כשמחפשים או בוחרים קטגוריה
+    // איפוס בעת שינוי חיפוש או קטגוריה
+    setProducts([]);
     setPage(1);
     setHasMore(true);
   }, [search, category]);
 
   useEffect(() => {
     fetchProducts();
-  }, [page, search, category]);
+  }, [page]);
 
   const fetchProducts = async () => {
-    if (!hasMore && page !== 1) return;
-
+    if (!hasMore || loading) return;
     setLoading(true);
     try {
       const res = await axios.get("http://localhost:3001/products", {
@@ -41,79 +48,123 @@ const ProductsList = () => {
           category: category || undefined,
           _limit: 20,
           _page: page,
+          _sort: "id",
+          _order: "asc",
         },
       });
 
       const data = res.data;
-      if (data.length < 20) setHasMore(false);
+      setProducts((prev) => [...prev, ...data]);
 
-      setProducts((prev) => (page === 1 ? data : [...prev, ...data]));
+      if (data.length < 20) {
+        setHasMore(false);
+      }
     } catch (err) {
       console.error("שגיאה בטעינת מוצרים", err);
     }
     setLoading(false);
   };
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearch(e.target.value);
-    setProducts([]);
-    setHasMore(true);
+  const handleDelete = async (id: number) => {
+    try {
+      await axios.delete(`http://localhost:3001/products/${id}`);
+      setProducts(products.filter((p) => p.id !== id));
+    } catch (err) {
+      console.error("שגיאה במחיקת מוצר", err);
+    }
   };
 
-  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setCategory(e.target.value);
-    setProducts([]);
-    setHasMore(true);
+  const handleAddToCart = (product: Product) => {
+    dispatch(addToCart({ id: product.id, name: product.name, price: product.price, quantity: 1 }));
+    setShowSuccess(true);
+    setTimeout(() => setShowSuccess(false), 2000);
   };
 
   return (
-    <div style={{ padding: "1rem" }}>
-      <h2>המוצרים שלנו</h2>
-      <div style={{ display: "flex", gap: "1rem", marginBottom: "1rem" }}>
-        <input
-          type="text"
-          placeholder="חפש לפי שם"
-          value={search}
-          onChange={handleSearchChange}
-        />
-        <select value={category} onChange={handleCategoryChange}>
-          <option value="">כל הקטגוריות</option>
-          <option value="שפתיים">שפתיים</option>
-          <option value="עיניים">עיניים</option>
-          <option value="פנים">פנים</option>
-          <option value="ציפורניים">ציפורניים</option>
-          <option value="טיפוח">טיפוח</option>
-          <option value="אקססוריז">אקססוריז</option>
-        </select>
+    <div className="container py-4">
+      {showSuccess && (
+        <div className="alert alert-success text-center" role="alert">
+          ✅ המוצר נוסף לסל בהצלחה!
+        </div>
+      )}
+      <h2 className="mb-4">המוצרים שלנו</h2>
+      <div className="row mb-4">
+        <div className="col-md-6">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="חפש לפי שם"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+        <div className="col-md-6">
+          <select
+            className="form-select"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+          >
+            <option value="">כל הקטגוריות</option>
+            <option value="שפתיים">שפתיים</option>
+            <option value="עיניים">עיניים</option>
+            <option value="פנים">פנים</option>
+            <option value="ציפורניים">ציפורניים</option>
+            <option value="טיפוח">טיפוח</option>
+            <option value="אקססוריז">אקססוריז</option>
+          </select>
+        </div>
       </div>
 
-      {products.length === 0 && !loading && <p>אין מוצרים להצגה</p>}
+      <div className="row">
+        {products.map((product) => (
+          <div className="col-md-4 mb-4" key={product.id}>
+            <div className="card h-100 shadow-sm position-relative">
+              <Link to={`/product/${product.id}`} className="text-decoration-none text-dark">
+                <img
+                  src={product.image}
+                  className="card-img-top"
+                  alt={product.name}
+                  style={{ height: 200, objectFit: "cover" }}
+                />
+              </Link>
+              <div className="card-body">
+                <h5 className="card-title">{product.name}</h5>
+                <p className="card-text">{product.price} ₪</p>
+                <Link to={`/product/${product.id}`} className="btn btn-link">פרטי מוצר</Link>
+              </div>
+              {!user?.isAdmin && (
+                <div className="d-flex justify-content-between p-2">
+                  <button
+                    className="btn btn-success w-100"
+                    onClick={() => handleAddToCart(product)}
+                  >
+                    הוסף לסל 🛒
+                  </button>
+                </div>
+              )}
+              {user?.isAdmin && (
+                <button
+                  className="btn btn-danger position-absolute"
+                  style={{ top: 10, right: 10 }}
+                  onClick={() => handleDelete(product.id)}
+                >
+                  🗑️
+                </button>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
 
-      {products.map((product) => (
-        <div
-          key={product.id}
-          style={{
-            borderBottom: "1px solid #ccc",
-            marginBottom: "1rem",
-            paddingBottom: "1rem",
-          }}
-        >
-          <Link to={`/product/${product.id}`}>
-            <h3>{product.name}</h3>
-            <img
-              src={product.image}
-              alt={product.name}
-              style={{ width: 150, height: "auto" }}
-            />
-            <p>מחיר: {product.price} ₪</p>
-          </Link>
+      {!loading && hasMore && (
+        <div className="text-center mt-3">
+          <button className="btn btn-primary" onClick={() => setPage((prev) => prev + 1)}>
+            טען עוד
+          </button>
         </div>
-      ))}
-
-      {hasMore && !loading && products.length > 0 && (
-        <button onClick={() => setPage((prev) => prev + 1)}>טען עוד</button>
       )}
-      {loading && <p>טוען...</p>}
+      {!hasMore && !loading && <p className="text-center text-muted">אין מוצרים נוספים</p>}
+      {loading && <p className="text-center">טוען...</p>}
     </div>
   );
 };

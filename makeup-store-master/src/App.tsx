@@ -7,24 +7,22 @@ import ProductDetails from "./pages/ProductDetails";
 import Cart from "./pages/Cart";
 import Profile from "./pages/Profile";
 import AddProduct from "./pages/AddProduct";
-import ProductsList from "./features/product/ProductList";
-import React from "react";
-
+import ProductsList from "./features/product/ProductList"
 function App() {
   return (
     <Router>
-    <Navbar />
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/products" element={<ProductsList />} />
-      <Route path="/product/:id" element={<ProductDetails />} />
-      <Route path="/profile" element={<Profile />} />
-      <Route path="/add-product" element={<AddProduct />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/cart" element={<Cart />} />
-    </Routes>
-  </Router>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/products" element={<ProductsList />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/product/:id" element={<ProductDetails />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/add-product" element={<AddProduct />} />
+      </Routes>
+    </Router>
   );
 }
 
