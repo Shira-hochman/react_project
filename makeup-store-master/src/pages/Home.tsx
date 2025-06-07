@@ -14,9 +14,15 @@ const Home = () => {
           <button>המוצרים שלנו</button>
         </Link>
 
-        <Link to="/profile">
-          <button>הפרטים שלי</button>
-        </Link>
+        {user ? (
+          <p>
+            שלום {user.isAdmin ? "למנהל מערכת" : user.name}
+          </p>
+        ) : (
+          <Link to="/login">
+            <button>הפרטים שלי</button>
+          </Link>
+        )}
 
         {user?.isAdmin && (
           <Link to="/add-product">

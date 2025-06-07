@@ -20,13 +20,20 @@
       "password": "Sh6536830!"
     },
     {
+<<<<<<< HEAD
       "id": "950d",
       "email": "gilivega977@gmail.com",
       "password": "Gilivega977@"
+=======
+      "id": "14f8",
+      "email": "micalste@gmail.com",
+      "password": "Sh6536830!"
+>>>>>>> 16fc4635f70f105b1b412e7c0ee46ba0a98b46ed
     }
   ],
   "products": [
     {
+<<<<<<< HEAD
       "id": "1",
       "name": "שפתון אדום קלאסי",
       "price": 45,
@@ -63,6 +70,8 @@
       "buyCount": 95
     },
     {
+=======
+>>>>>>> 16fc4635f70f105b1b412e7c0ee46ba0a98b46ed
       "id": "5",
       "name": "פודרה שקופה",
       "price": 40,
@@ -76,11 +85,16 @@
       "name": "מייקאפ קליר",
       "price": 70,
       "category": "פנים",
+<<<<<<< HEAD
       "image": "https://adahlazorgan.co.il/cdn/shop/files/Fusion4KNEW.jpg?v=1749026992&width=533",
+=======
+      "image": "https://via.placeholder.com/150?text=Real+Foundation",
+>>>>>>> 16fc4635f70f105b1b412e7c0ee46ba0a98b46ed
       "description": "מייקאפ קל, נושם עם כיסוי גבוה",
       "buyCount": 130
     },
     {
+<<<<<<< HEAD
       "id": "7",
       "name": " קרם לחות",
       "price": 85,
@@ -90,6 +104,8 @@
       "buyCount": 75
     },
     {
+=======
+>>>>>>> 16fc4635f70f105b1b412e7c0ee46ba0a98b46ed
       "id": "8",
       "name": "צללית טבעית",
       "price": 55,
@@ -304,6 +320,26 @@
       "image": "https://via.placeholder.com/150?text=Cream+Blush",
       "description": "פודרת סומק קרמית למראה זוהר טבעי",
       "buyCount": 80
+    },
+    {
+      "id": "6de2",
+      "name": "מברשת סומק",
+      "price": 50,
+      "category": "טיפוח",
+      "image": "https://www.dealcosmetics.co.il/cdn/shop/products/e8c820303d2bc524ed8b34b28ce5246c.jpg?v=1653421297",
+      "description": "מוצר מעולה ",
+      "buyCount": 0
+    },
+    {
+      "id": "4943",
+      "name": "מברשת לסומק",
+      "price": 89,
+      "category": "אקססוריז",
+      "image": "https://www.sacara.co.il/pub/media/catalog/product/cache/89e96a069f9013acea2045191a9cb4f5/6/0/6010101003-1714469514707684.jpg",
+      "image2": "",
+      "image3": "",
+      "description": "מברשת איפור מקצועית אשר ",
+      "buyCount": 0
     }
   ]
 }
