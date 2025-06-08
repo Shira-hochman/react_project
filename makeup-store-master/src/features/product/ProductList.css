@@ -1,0 +1,33 @@
+
+.product-page {
+  background: #fdfdfd;
+  padding-bottom: 50px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.product-card {
+  background: white;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.product-card img {
+  transition: transform 0.3s ease;
+}
+
+.product-card:hover img {
+  transform: scale(1.05);
+}
+
+.btn-dark, .btn-outline-dark {
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+}
+
+.alert-success {
+  font-weight: bold;
+}

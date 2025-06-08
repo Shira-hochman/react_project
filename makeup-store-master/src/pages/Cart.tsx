@@ -3,6 +3,7 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../store";
 import { removeFromCart, increaseQuantity, decreaseQuantity } from "./cartSlice";
+import { Link } from "react-router-dom";
 
 const Cart = () => {
   const items = useSelector((state: RootState) => state.cart.items);
@@ -33,6 +34,7 @@ const Cart = () => {
           <h4 className="mt-4">סך הכול לתשלום: {total} ₪</h4>
         </div>
       )}
+       <button> <Link to="/CheckOutPage">לתשלום</Link></button>
     </div>
   );
 };

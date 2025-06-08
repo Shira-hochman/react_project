@@ -1,0 +1,59 @@
+
+.navbar-wrapper {
+  font-family: sans-serif;
+  direction: rtl;
+}
+
+.navbar-top-banner {
+  background-color: black;
+  color: white;
+  text-align: center;
+  padding: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.navbar-main {
+  background-color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid #eee;
+}
+
+.navbar-logo {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: bold;
+  letter-spacing: 0.1rem;
+}
+
+.navbar-search {
+  font-size: 1rem;
+}
+
+.navbar-icons {
+  display: flex;
+  gap: 1rem;
+  font-size: 1.2rem;
+}
+
+.navbar-categories {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  padding: 1rem;
+  border-bottom: 1px solid #eee;
+  background-color: white;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.navbar-categories a {
+  text-decoration: none;
+  color: black;
+}
+
+.navbar-categories a:hover {
+  text-decoration: underline;
+}

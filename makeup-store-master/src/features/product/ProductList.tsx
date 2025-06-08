@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../store";
 import { addToCart } from "../../pages/cartSlice";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "./ProductList.css"; // נניח שנוסיף קובץ CSS מותאם
 
 interface Product {
   id: number;
@@ -19,60 +20,44 @@ interface Product {
 const ProductsList = () => {
   const user = useSelector((state: RootState) => state.cart.user);
   const dispatch = useDispatch();
-  const [products, setProducts] = useState<Product[]>([]);
+
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
+  const [visibleCount, setVisibleCount] = useState(20);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
-  const [loading, setLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
 
-  useEffect(() => {
-    // איפוס בעת שינוי חיפוש או קטגוריה
-    setProducts([]);
-    setPage(1);
-    setHasMore(true);
-  }, [search, category]);
-
-  useEffect(() => {
-    fetchProducts();
-  }, [page]);
-
-  const fetchProducts = async () => {
-    if (!hasMore || loading) return;
-    setLoading(true);
+  const fetchAllProducts = async () => {
     try {
-      const res = await axios.get("http://localhost:3001/products", {
-        params: {
-          q: search || undefined,
-          category: category || undefined,
-          _limit: 20,
-          _page: page,
-          _sort: "id",
-          _order: "asc",
-        },
-      });
-
-      const data = res.data;
-      setProducts((prev) => [...prev, ...data]);
-
-      if (data.length < 20) {
-        setHasMore(false);
-      }
+      const res = await axios.get("http://localhost:3001/products");
+      setAllProducts(res.data);
     } catch (err) {
-      console.error("שגיאה בטעינת מוצרים", err);
-    }
-    setLoading(false);
-  };
-
-  const handleDelete = async (id: number) => {
-    try {
-      await axios.delete(`http://localhost:3001/products/${id}`);
-      setProducts(products.filter((p) => p.id !== id));
-    } catch (err) {
-      console.error("שגיאה במחיקת מוצר", err);
+      console.error("שגיאה בטעינת כל המוצרים", err);
     }
   };
+
+  useEffect(() => {
+    fetchAllProducts();
+  }, []);
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
+    setVisibleCount(20);
+  };
+
+  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setCategory(e.target.value);
+    setVisibleCount(20);
+  };
+
+  const filteredProducts = allProducts.filter((product) => {
+    return (
+      (!search || product.name.includes(search)) &&
+      (!category || product.category === category)
+    );
+  });
+
+  const visibleProducts = filteredProducts.slice(0, visibleCount);
 
   const handleAddToCart = (product: Product) => {
     dispatch(addToCart({ id: product.id, name: product.name, price: product.price, quantity: 1 }));
@@ -80,91 +65,121 @@ const ProductsList = () => {
     setTimeout(() => setShowSuccess(false), 2000);
   };
 
+  const handleDelete = async (id: number) => {
+    try {
+      await axios.delete(`http://localhost:3001/products/${id}`);
+      setAllProducts((prev) => prev.filter((p) => p.id !== id));
+    } catch (err) {
+      console.error("שגיאה במחיקת מוצר", err);
+    }
+  };
+
   return (
-    <div className="container py-4">
+    <div className="product-page">
       {showSuccess && (
-        <div className="alert alert-success text-center" role="alert">
+        <div className="alert alert-success text-center fixed-top mt-3 mx-auto w-50 rounded-pill" role="alert">
           ✅ המוצר נוסף לסל בהצלחה!
         </div>
       )}
-      <h2 className="mb-4">המוצרים שלנו</h2>
-      <div className="row mb-4">
-        <div className="col-md-6">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="חפש לפי שם"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </div>
-        <div className="col-md-6">
-          <select
-            className="form-select"
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-          >
-            <option value="">כל הקטגוריות</option>
-            <option value="שפתיים">שפתיים</option>
-            <option value="עיניים">עיניים</option>
-            <option value="פנים">פנים</option>
-            <option value="ציפורניים">ציפורניים</option>
-            <option value="טיפוח">טיפוח</option>
-            <option value="אקססוריז">אקססוריז</option>
-          </select>
-        </div>
-      </div>
-
-      <div className="row">
-        {products.map((product) => (
-          <div className="col-md-4 mb-4" key={product.id}>
-            <div className="card h-100 shadow-sm position-relative">
-              <Link to={`/product/${product.id}`} className="text-decoration-none text-dark">
-                <img
-                  src={product.image}
-                  className="card-img-top"
-                  alt={product.name}
-                  style={{ height: 200, objectFit: "cover" }}
-                />
-              </Link>
-              <div className="card-body">
-                <h5 className="card-title">{product.name}</h5>
-                <p className="card-text">{product.price} ₪</p>
-                <Link to={`/product/${product.id}`} className="btn btn-link">פרטי מוצר</Link>
-              </div>
-              {!user?.isAdmin && (
-                <div className="d-flex justify-content-between p-2">
-                  <button
-                    className="btn btn-success w-100"
-                    onClick={() => handleAddToCart(product)}
-                  >
-                    הוסף לסל 🛒
-                  </button>
-                </div>
-              )}
-              {user?.isAdmin && (
-                <button
-                  className="btn btn-danger position-absolute"
-                  style={{ top: 10, right: 10 }}
-                  onClick={() => handleDelete(product.id)}
-                >
-                  🗑️
-                </button>
-              )}
-            </div>
+      <h2 className="text-center fw-bold my-5 display-6">מבחר מוצרים</h2>
+      <div className="container mb-4">
+        <div className="row g-3 justify-content-center">
+          <div className="col-md-5">
+            <input
+              type="text"
+              className="form-control shadow-sm rounded-pill text-center"
+              placeholder="חפש מוצר..."
+              value={search}
+              onChange={handleSearchChange}
+            />
           </div>
-        ))}
+          <div className="col-md-5">
+            <select
+              className="form-select shadow-sm rounded-pill text-center"
+              value={category}
+              onChange={handleCategoryChange}
+            >
+              <option value="">כל הקטגוריות</option>
+              <option value="שפתיים">שפתיים</option>
+              <option value="עיניים">עיניים</option>
+              <option value="פנים">פנים</option>
+              <option value="ציפורניים">ציפורניים</option>
+              <option value="טיפוח">טיפוח</option>
+              <option value="אקססוריז">אקססוריז</option>
+            </select>
+          </div>
+        </div>
       </div>
 
-      {!loading && hasMore && (
-        <div className="text-center mt-3">
-          <button className="btn btn-primary" onClick={() => setPage((prev) => prev + 1)}>
-            טען עוד
-          </button>
+      <div className="container">
+        <div className="row g-4">
+          {visibleProducts.map((product) => (
+            <div className="col-6 col-md-4 col-lg-3" key={product.id}>
+              <div className="product-card shadow-sm rounded-4 p-2">
+                <Link to={`/product/${product.id}`} className="text-decoration-none text-dark">
+                  {product.image ? (
+                    <img
+                      src={product.image}
+                      className="img-fluid rounded-4 mb-2"
+                      alt={product.name}
+                      style={{ height: 220, objectFit: "cover", width: "100%" }}
+                    />
+                  ) : (
+                    <div
+                      className="bg-light rounded-4 d-flex align-items-center justify-content-center mb-2"
+                      style={{ height: 220 }}
+                    >
+                      אין תמונה
+                    </div>
+                  )}
+                </Link>
+                <div className="text-center">
+                  <h6 className="fw-bold text-truncate">{product.name}</h6>
+                  <div className="text-muted small">₪ {product.price}</div>
+                  <div className="mt-2">
+                    <Link
+                      to={`/product/${product.id}`}
+                      className="btn btn-outline-dark btn-sm rounded-pill me-1"
+                    >
+                      פרטי מוצר
+                    </Link>
+                    {!user?.isAdmin && (
+                      <button
+                        className="btn btn-dark btn-sm rounded-pill"
+                        onClick={() => handleAddToCart(product)}
+                      >
+                        🛒 הוסף לסל
+                      </button>
+                    )}
+                    {user?.isAdmin && (
+                      <button
+                        className="btn btn-danger btn-sm mt-2 rounded-pill w-100"
+                        onClick={() => handleDelete(product.id)}
+                      >
+                        🗑️ מחק מוצר
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
-      )}
-      {!hasMore && !loading && <p className="text-center text-muted">אין מוצרים נוספים</p>}
-      {loading && <p className="text-center">טוען...</p>}
+
+        {visibleCount < filteredProducts.length && (
+          <div className="text-center my-4">
+            <button
+              className="btn btn-dark px-4 py-2 rounded-pill"
+              onClick={() => setVisibleCount((prev) => prev + 20)}
+            >
+              הצג עוד
+            </button>
+          </div>
+        )}
+        {visibleCount >= filteredProducts.length && (
+          <p className="text-center text-muted mt-4">אין מוצרים נוספים</p>
+        )}
+      </div>
     </div>
   );
 };
