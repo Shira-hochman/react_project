@@ -1,0 +1,61 @@
+.form-container {
+  max-width: 500px;
+  margin: 2rem auto;
+  background-color: #fff5fc;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  direction: rtl;
+  font-family: sans-serif;
+}
+
+.form-title {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #585555;
+}
+
+.product-form .form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-weight: bold;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.textarea {
+  height: 80px;
+  resize: vertical;
+}
+
+.error-message {
+  color: #585555;
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+}
+
+.submit-button {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #585555;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.submit-button:hover {
+  background-color: #585555;
+}

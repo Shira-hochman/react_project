@@ -1,9 +1,9 @@
-// ✅ קובץ: src/pages/Cart.tsx
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../store";
 import { removeFromCart, increaseQuantity, decreaseQuantity } from "./cartSlice";
 import { Link } from "react-router-dom";
+import "./Cart.css"; // ← נוסיף קובץ CSS
 
 const Cart = () => {
   const items = useSelector((state: RootState) => state.cart.items);
@@ -12,29 +12,33 @@ const Cart = () => {
   const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   return (
-    <div className="container py-4">
-      <h2 className="mb-4">העגלה שלי</h2>
+    <div className="cart-container">
+      <h2 className="cart-title">העגלה שלי</h2>
+
       {items.length === 0 ? (
-        <p>העגלה ריקה</p>
+        <p className="empty-cart">העגלה ריקה</p>
       ) : (
-        <div>
+        <div className="cart-list">
           {items.map(item => (
-            <div key={item.id} className="d-flex justify-content-between align-items-center border-bottom py-2">
-              <div>
+            <div key={item.id} className="cart-item">
+              <div className="item-details">
                 <h5>{item.name}</h5>
                 <p>{item.price} ₪ × {item.quantity}</p>
               </div>
-              <div>
-                <button className="btn btn-secondary mx-1" onClick={() => dispatch(decreaseQuantity(item.id))}>−</button>
-                <button className="btn btn-secondary mx-1" onClick={() => dispatch(increaseQuantity(item.id))}>+</button>
-                <button className="btn btn-danger mx-1" onClick={() => dispatch(removeFromCart(item.id))}>🗑️</button>
+              <div className="item-actions">
+                <button onClick={() => dispatch(decreaseQuantity(item.id))}>−</button>
+                <button onClick={() => dispatch(increaseQuantity(item.id))}>+</button>
+                <button onClick={() => dispatch(removeFromCart(item.id))}>🗑️</button>
               </div>
             </div>
           ))}
-          <h4 className="mt-4">סך הכול לתשלום: {total} ₪</h4>
+
+          <div className="cart-total">
+            <h4>סך הכול לתשלום: {total.toFixed(2)} ₪</h4>
+            <Link to="/CheckOutPage" className="checkout-button">לתשלום</Link>
+          </div>
         </div>
       )}
-       <button> <Link to="/CheckOutPage">לתשלום</Link></button>
     </div>
   );
 };

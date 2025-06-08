@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import "./Navbar.css";
+import Register from "../pages/Register";
 
 function Navbar() {
   return (
@@ -10,9 +11,9 @@ function Navbar() {
       {/* תפריט עליון */}
       <nav className="navbar-main">
         <div className="navbar-icons">
-          <span role="img" aria-label="profile">👤</span>
-          <span role="img" aria-label="favorites">❤️</span>
-          <span role="img" aria-label="cart">👜</span>
+       <span>
+  <Link to="/Register" style={{ color: "gray", textDecoration: "none" }}>הרשמה</Link>
+        </span>
         </div>
         <h1 className="navbar-logo">ADAH</h1>
         <div className="navbar-search">חיפוש 🔍</div>

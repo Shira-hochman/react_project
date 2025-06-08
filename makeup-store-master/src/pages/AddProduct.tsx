@@ -3,6 +3,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import "./AddProduct.css"; // ← קובץ CSS חדש
 
 interface Product {
   id: string;
@@ -54,41 +55,41 @@ function AddProduct() {
   });
 
   return (
-    <div style={{ maxWidth: 500, margin: "auto" }}>
-      <h2>הוספת מוצר חדש</h2>
-      <form onSubmit={formik.handleSubmit}>
-        <div>
-          <label>שם המוצר:</label>
-          <input
-            type="text"
-            name="name"
-            value={formik.values.name}
-            onChange={formik.handleChange}
-          />
-          {formik.touched.name && formik.errors.name && (
-            <div style={{ color: "red" }}>{formik.errors.name}</div>
-          )}
-        </div>
+    <div className="form-container">
+      <h2 className="form-title">הוספת מוצר חדש</h2>
+      <form onSubmit={formik.handleSubmit} className="product-form">
+        {[
+          { label: "שם המוצר", name: "name", type: "text" },
+          { label: "מחיר", name: "price", type: "number" },
+          { label: "קישור לתמונה ראשית", name: "image", type: "text" },
+          { label: "תמונה נוספת 1", name: "image2", type: "text" },
+          { label: "תמונה נוספת 2", name: "image3", type: "text" },
+        ].map(({ label, name, type }) => (
+          <div key={name} className="form-group">
+            <label>{label}:</label>
+            <input
+              type={type}
+              name={name}
+              value={formik.values[name as keyof typeof formik.values]}
+              onChange={formik.handleChange}
+              className="form-input"
+            />
+            {formik.touched[name as keyof typeof formik.touched] &&
+              formik.errors[name as keyof typeof formik.errors] && (
+                <div className="error-message">
+                  {formik.errors[name as keyof typeof formik.errors]}
+                </div>
+              )}
+          </div>
+        ))}
 
-        <div>
-          <label>מחיר:</label>
-          <input
-            type="number"
-            name="price"
-            value={formik.values.price}
-            onChange={formik.handleChange}
-          />
-          {formik.touched.price && formik.errors.price && (
-            <div style={{ color: "red" }}>{formik.errors.price}</div>
-          )}
-        </div>
-
-        <div>
+        <div className="form-group">
           <label>קטגוריה:</label>
           <select
             name="category"
             value={formik.values.category}
             onChange={formik.handleChange}
+            className="form-input"
           >
             <option value="">בחר קטגוריה</option>
             <option value="פנים">פנים</option>
@@ -99,56 +100,24 @@ function AddProduct() {
             <option value="אקססוריז">אקססוריז</option>
           </select>
           {formik.touched.category && formik.errors.category && (
-            <div style={{ color: "red" }}>{formik.errors.category}</div>
+            <div className="error-message">{formik.errors.category}</div>
           )}
         </div>
 
-        <div>
-          <label>קישור לתמונה ראשית:</label>
-          <input
-            type="text"
-            name="image"
-            value={formik.values.image}
-            onChange={formik.handleChange}
-          />
-          {formik.touched.image && formik.errors.image && (
-            <div style={{ color: "red" }}>{formik.errors.image}</div>
-          )}
-        </div>
-
-        <div>
-          <label>תמונה נוספת 1:</label>
-          <input
-            type="text"
-            name="image2"
-            value={formik.values.image2}
-            onChange={formik.handleChange}
-          />
-        </div>
-
-        <div>
-          <label>תמונה נוספת 2:</label>
-          <input
-            type="text"
-            name="image3"
-            value={formik.values.image3}
-            onChange={formik.handleChange}
-          />
-        </div>
-
-        <div>
+        <div className="form-group">
           <label>תיאור:</label>
           <textarea
             name="description"
             value={formik.values.description}
             onChange={formik.handleChange}
+            className="form-input textarea"
           />
           {formik.touched.description && formik.errors.description && (
-            <div style={{ color: "red" }}>{formik.errors.description}</div>
+            <div className="error-message">{formik.errors.description}</div>
           )}
         </div>
 
-        <button type="submit">הוסף מוצר</button>
+        <button type="submit" className="submit-button">הוסף מוצר</button>
       </form>
     </div>
   );
