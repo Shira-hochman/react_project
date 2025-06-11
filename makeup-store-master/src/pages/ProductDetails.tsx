@@ -1,48 +1,79 @@
-// ✅ קובץ: src/pages/ProductDetails.tsx
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
-import { addToCart } from "../features/product/cartSlice";
-import { RootState } from "../store";
+import { useParams } from "react-router-dom";
 
-const ProductDetails = () => {
-  const { id } = useParams();
-  const [product, setProduct] = useState<any>(null);
-  const dispatch = useDispatch();
-  const user = useSelector((state: RootState) => state.cart.user);
+interface Product {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  category: string;
+  image: string;
+  buyCount: number;
+}
+
+interface Review {
+  id: string;
+  productId: string;
+  userId: string;
+  rating: number;
+  comment: string;
+}
+
+const ProductDetails: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
+  const [product, setProduct] = useState<Product | null>(null);
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    axios.get(`http://localhost:3001/products/${id}`).then(res => {
-      setProduct(res.data);
-    });
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        // קריאה למוצר
+        const productResponse = await axios.get<Product>(`http://localhost:3001/products/${id}`);
+        setProduct(productResponse.data);
+
+        // קריאה לחוות דעת
+        const reviewsResponse = await axios.get<Review[]>(`http://localhost:3001/reviews?productId=${id}`);
+        setReviews(reviewsResponse.data);
+      } catch (err) {
+        setError("אירעה שגיאה בעת טעינת הנתונים");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, [id]);
 
-  if (!product) return <p className="text-center">טוען פרטי מוצר...</p>;
+  if (loading) return <div>טוען...</div>;
+  if (error) return <div>{error}</div>;
+  if (!product) return <div>המוצר לא נמצא</div>;
 
   return (
-    <div className="container py-4">
+    <div className="container mt-4">
       <h2>{product.name}</h2>
-      <div className="row">
-        <div className="col-md-6">
-          <img src={product.image} alt={product.name} className="img-fluid mb-2" />
-          <div className="d-flex gap-2">
-            <img src="https://via.placeholder.com/100" alt="תמונה נוספת 1" />
-            <img src="https://via.placeholder.com/100" alt="תמונה נוספת 2" />
+      <img src={product.image} alt={product.name} style={{ maxWidth: "300px" }} />
+      <p>{product.description}</p>
+      <p>קטגוריה: {product.category}</p>
+      <p>מחיר: ₪{product.price}</p>
+      <p>מספר רכישות: {product.buyCount}</p>
+
+      <h3 className="mt-4">חוות דעת</h3>
+      {reviews.length === 0 ? (
+        <p>אין חוות דעת עדיין.</p>
+      ) : (
+        reviews.map((review) => (
+          <div key={review.id} className="border p-2 my-2">
+            <p>דירוג: {review.rating} כוכבים</p>
+            <p>תגובה: {review.comment}</p>
           </div>
-        </div>
-        <div className="col-md-6">
-          <p><strong>קטגוריה:</strong> {product.category}</p>
-          <p><strong>תיאור:</strong> {product.description}</p>
-          <p><strong>כמות קניות:</strong> {product.buyCount}</p>
-          <p><strong>מחיר:</strong> {product.price} ₪</p>
-          {!user?.isAdmin && (
-            <button className="btn btn-success" onClick={() => dispatch(addToCart({ id: product.id, name: product.name, price: product.price, quantity: 1 }))}>
-              הוסף לסל 🛒
-            </button>
-          )}
-        </div>
-      </div>
+        ))
+      )}
     </div>
   );
 };

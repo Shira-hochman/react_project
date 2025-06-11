@@ -307,5 +307,21 @@
       "description": "פודרת סומק קרמית למראה זוהר טבעי",
       "buyCount": 80
     }
-  ]
+  ],"reviews": [
+  {
+    "id": "1",
+    "productId": "1",
+    "userId": "2",
+    "rating": 5,
+    "comment": "ממש אהבתי את השפתון"
+  },
+  {
+    "id": "2",
+    "productId": "1",
+    "userId": "99c8",
+    "rating": 4,
+    "comment": "צבע יפה אבל מתקלף קצת"
+  }
+]
+
 }
