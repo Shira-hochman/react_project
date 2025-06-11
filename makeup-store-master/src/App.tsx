@@ -9,6 +9,7 @@ import Profile from "./pages/Profile";
 import AddProduct from "./pages/AddProduct";
 import ProductsList from "./features/product/ProductList"
 import CheckOutPage from "./pages/CheckOutPage";
+
 function App() {
   return (
     <Router>
@@ -22,8 +23,7 @@ function App() {
         <Route path="/cart" element={<Cart />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/add-product" element={<AddProduct />} />
-                <Route path="/CheckOutPage" element={<CheckOutPage />} />
-
+        <Route path="/CheckOutPage" element={<CheckOutPage />} />
       </Routes>
     </Router>
   );

@@ -3,7 +3,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../store";
-import { addToCart } from "../../pages/cartSlice";
+import { addToCart } from "./cartSlice";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./ProductList.css"; // נניח שנוסיף קובץ CSS מותאם
 

@@ -2,44 +2,57 @@ import React, { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
+type RegisterFormValues = {
+  name: string;
+  email: string;
+  password: string;
+};
 
 const Register = () => {
-  const [message, setMessage] = useState("");
+  const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
 
-  const formik = useFormik({
+  const formik = useFormik<RegisterFormValues>({
     initialValues: {
+      name: "",
       email: "",
       password: "",
-      confirmPassword: "",
     },
     validationSchema: Yup.object({
-      email: Yup.string()
-        .email("כתובת מייל לא תקינה")
-        .required("שדה חובה"),
+      name: Yup.string().required("שם חובה"),
+      email: Yup.string().email("כתובת מייל לא תקינה").required("מייל חובה"),
       password: Yup.string()
-        .required("שדה חובה")
-        .min(8, "לפחות 8 תווים")
-        .matches(/[A-Z]/, "חייב להכיל אות גדולה")
-        .matches(/[a-z]/, "חייב להכיל אות קטנה")
-        .matches(/[0-9]/, "חייב להכיל מספר")
-        .matches(/[@$!%*?&]/, "חייב להכיל תו מיוחד"),
-      confirmPassword: Yup.string()
-        .oneOf([Yup.ref("password")], "הסיסמאות לא תואמות")
-        .required("אישור סיסמה חובה"),
+        .required("סיסמה חובה")
+        .min(6, "לפחות 6 תווים")
+        .matches(/[A-Z]/, "חייבת לכלול אות גדולה")
+        .matches(/[a-z]/, "חייבת לכלול אות קטנה")
+        .matches(/[0-9]/, "חייבת לכלול ספרה")
+        .matches(/[@$!%*?&]/, "חייבת לכלול תו מיוחד"),
     }),
     onSubmit: async (values) => {
       try {
+        // האם המשתמש כבר קיים?
+        const existing = await axios.get(
+          `http://localhost:3001/users?email=${encodeURIComponent(values.email)}`
+        );
+
+        if (existing.data.length > 0) {
+          alert("משתמש כבר קיים במערכת");
+          return;
+        }
+
         await axios.post("http://localhost:3001/users", {
-          email: values.email,
-          password: values.password,
+          ...values,
+          isAdmin: false,
         });
 
-        setMessage("נרשמת בהצלחה! ניתן להתחבר כאן.");
-        setTimeout(() => navigate("/login"), 3000);
+        setSuccess(true);
+        setTimeout(() => navigate("/login"), 2000);
       } catch (err) {
-        setMessage("שגיאה ברישום, נסה שוב");
+        console.error("שגיאה ביצירת משתמש", err);
+        alert("שגיאה בשמירה, נסה שוב");
       }
     },
   });
@@ -48,48 +61,57 @@ const Register = () => {
     <div style={{ maxWidth: 400, margin: "auto" }}>
       <h2>הרשמה</h2>
       <form onSubmit={formik.handleSubmit}>
-        <label>אימייל</label>
-        <input
-          name="email"
-          type="email"
-          onChange={formik.handleChange}
-          value={formik.values.email}
-          style={{ width: "100%", padding: 8 }}
-        />
-        {formik.touched.email && formik.errors.email && (
-          <div style={{ color: "red" }}>{formik.errors.email}</div>
-        )}
+        <div>
+          <label>שם מלא</label>
+          <input
+            name="name"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.name}
+          />
+          {formik.touched.name && formik.errors.name && (
+            <div style={{ color: "red" }}>{formik.errors.name}</div>
+          )}
+        </div>
 
-        <label>סיסמה</label>
-        <input
-          name="password"
-          type="password"
-          onChange={formik.handleChange}
-          value={formik.values.password}
-          style={{ width: "100%", padding: 8 }}
-        />
-        {formik.touched.password && formik.errors.password && (
-          <div style={{ color: "red" }}>{formik.errors.password}</div>
-        )}
+        <div>
+          <label>אימייל</label>
+          <input
+            name="email"
+            type="email"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.email}
+          />
+          {formik.touched.email && formik.errors.email && (
+            <div style={{ color: "red" }}>{formik.errors.email}</div>
+          )}
+        </div>
 
-        <label>אישור סיסמה</label>
-        <input
-          name="confirmPassword"
-          type="password"
-          onChange={formik.handleChange}
-          value={formik.values.confirmPassword}
-          style={{ width: "100%", padding: 8 }}
-        />
-        {formik.touched.confirmPassword && formik.errors.confirmPassword && (
-          <div style={{ color: "red" }}>{formik.errors.confirmPassword}</div>
-        )}
+        <div>
+          <label>סיסמה</label>
+          <input
+            name="password"
+            type="password"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.password}
+          />
+          {formik.touched.password && formik.errors.password && (
+            <div style={{ color: "red" }}>{formik.errors.password}</div>
+          )}
+        </div>
 
-        <button type="submit" style={{ marginTop: 10 }}>הרשמה</button>
+        <button type="submit" style={{ marginTop: 10 }}>
+          הרשמה
+        </button>
       </form>
-      {message && <div style={{ marginTop: 10, color: "green" }}>{message}</div>}
-      <div style={{ marginTop: 10 }}>
-        <Link to="/login">כבר רשומים? התחברו כאן</Link>
-      </div>
+
+      {success && (
+        <div style={{ color: "green", marginTop: 10 }}>
+          ההרשמה הצליחה! תועברי למסך התחברות...
+        </div>
+      )}
     </div>
   );
 };

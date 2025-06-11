@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../store";
-import { removeFromCart, increaseQuantity, decreaseQuantity } from "./cartSlice";
+import { removeFromCart, increaseQuantity, decreaseQuantity } from "../features/product/cartSlice";
 import { Link } from "react-router-dom";
 import "./Cart.css"; // ← נוסיף קובץ CSS
 

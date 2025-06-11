@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setUser } from "./cartSlice";
+import { setUser } from "../features/product/cartSlice";
 
 type LoginFormValues = {
   email: string;
